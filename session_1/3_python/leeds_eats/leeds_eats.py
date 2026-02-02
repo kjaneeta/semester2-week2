@@ -5,11 +5,28 @@ import sqlite3
 # ==================================================
 
 def total_customers(conn):
-    pass
+    query = '''
+            SELECT COUNT(*) AS total_customers
+            FROM customers;
+            '''
+
+    cursor = conn.execute(query)
+    row = cursor.fetchone()
+    print(f"Total customers: {row['total_customers']}")
 
 
 def customer_signup_range(conn):
-    pass
+    query = '''
+            SELECT MIN(signup_date) AS first_signup, MAX(signup_date) AS last_signup 
+            FROM customers;
+            '''
+
+    cursor = conn.execute(query)
+    row = cursor.fetchone()
+    
+    first = row['first_signup'] or '(no signups)'
+    last  = row['last_signup']  or '(no signups)'
+    print(f"Signup range: {first} to {last}")
 
 
 def order_summary_stats(conn):
