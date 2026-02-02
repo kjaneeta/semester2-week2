@@ -22,3 +22,14 @@ JOIN Members ON Loans.member_id=Members.id;
 SELECT Books.title AS Book_title, Loans.loan_date AS Loan_date
 FROM Books LEFT JOIN Loans ON Books.id=Loans.book_id;
 
+-- 3. **Branches and books**  
+-- List all library branches and the books they hold.
+SELECT LibraryBranch.name AS Library_branch, Books.title AS Book_title
+FROM LibraryBranch LEFT JOIN Books ON LibraryBranch.id=Books.branch_id;
+
+-- 4. **Branch book counts**  
+-- Show each library branch and the number of books it holds.
+SELECT LibraryBranch.name AS Library_branch, COUNT(Books.id) AS Number_of_books
+FROM LibraryBranch LEFT JOIN Books ON LibraryBranch.id=Books.branch_id;
+-- it only shows Central Library???
+
