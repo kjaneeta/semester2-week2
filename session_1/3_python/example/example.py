@@ -115,7 +115,19 @@ def review_student_numbers(db):
     Print the number of students registered for each course.    
     :param db: Database object to query
     '''
-    pass
+
+    query = '''
+            SELECT c.id AS CourseID, c.name AS CourseName, COUNT(sc.student_id) AS Numberofstudents
+            FROM Courses c
+            LEFT JOIN StudentCourses sc
+            ON c.id = sc.course_id
+            GROUP BY c.id, c.name
+            ORDER BY c.name;
+            '''
+
+    cursor = db.execute(query)
+    for row in cursor:
+        print(f"ID: {row[0]}\tCourse: {row[1]}\tStudents: {row[2]}")
 
 def main():
 
