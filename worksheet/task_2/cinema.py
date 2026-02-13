@@ -36,9 +36,7 @@ def customer_tickets(conn, customer_id):
 
             '''
     cursor = conn.execute(query, (customer_id,))
-    for title in cursor:
-        print(f"film_title: {title[0]}\tscreen: {title[1]}\tprice: {title[2]}")
-
+    return cursor.fetchall()
 
 def screening_sales(conn):
     """
@@ -61,8 +59,7 @@ def screening_sales(conn):
             '''
     
     cursor = conn.execute(query)
-    for screening in cursor:
-        print(f"screening_id: {screening[0]}\tfilm_title: {screening[1]}\ttickets_sold: {screening[2]}")
+    return cursor.fetchall()
 
 
 
@@ -89,5 +86,4 @@ def top_customers_by_spend(conn, limit):
             '''
     
     cursor = conn.execute(query, (limit,))
-    for screening in cursor:
-        print(f"screening_id: {screening[0]}\tfilm_title: {screening[1]}\ttickets_sold: {screening[2]}")
+    return cursor.fetchall()
