@@ -18,7 +18,21 @@ def customer_tickets(conn, customer_id):
     Include only tickets purchased by the given customer_id.
     Order results by film title alphabetically.
     """
-    pass
+
+    query = '''
+            SELECT films.title AS film_title, 
+            screenings.screen AS screen, 
+            tickets.price AS price
+            FROM films
+            JOIN screenings ON films.film_id=screenings.film_id
+            JOIN tickets ON screenings.screening_id=tickets.screening_id
+            WHERE tickets.customer_id=?
+            ORDER BY films.title ASC;
+
+            '''
+    cursor = conn.execute(query, (customer_id,))
+    for title in cursor:
+        print(f"film_title: {title[0]}\tscreen: {title[1]}\tprice: {title[2]}")
 
 
 def screening_sales(conn):
@@ -29,7 +43,22 @@ def screening_sales(conn):
     Include all screenings, even if tickets_sold is 0.
     Order results by tickets_sold descending.
     """
-    pass
+    query = '''
+            SELECT screenings.screening_id AS screening_id, 
+            films.title AS film_title, 
+            COUNT(tickets.ticket_id) AS tickets_sold
+            FROM screenings
+            JOIN films ON screenings.film_id=films.film_id
+            LEFT JOIN tickets ON tickets.screening_id=screenings.screening_id
+            GROUP BY screenings.screening_id, films.title
+            ORDER BY tickets_sold DESC;
+
+            '''
+    
+    cursor = conn.execute(query)
+    for screening in cursor:
+        print(f"screening_id: {screening[0]}\tfilm_title: {screening[1]}\ttickets_sold: {screening[2]}")
+
 
 
 def top_customers_by_spend(conn, limit):
@@ -42,4 +71,18 @@ def top_customers_by_spend(conn, limit):
     Order by total_spent descending.
     Limit the number of rows returned to `limit`.
     """
-    pass
+    
+    query = '''
+            SELECT customers.customer_name AS customer_name,
+            SUM(tickets.price) AS total_spent
+            FROM customers
+            JOIN tickets ON customers.customer_id=tickets.customer_id
+            GROUP BY customers.customer_id, customers.customer_name
+            ORDER BY total_spent DESC
+            LIMIT ?;
+
+            '''
+    
+    cursor = conn.execute(query, (limit,))
+    for screening in cursor:
+        print(f"screening_id: {screening[0]}\tfilm_title: {screening[1]}\ttickets_sold: {screening[2]}")
